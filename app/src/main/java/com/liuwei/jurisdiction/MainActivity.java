@@ -34,11 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
     }
 
-    @Override
-    public boolean shouldShowRequestPermissionRationale(String permission) {
-        return super.shouldShowRequestPermissionRationale(permission);
-    }
-
     private void initView() {
         btnApply = (Button) findViewById(R.id.btn_apply);
         btnCallPhone = (Button) findViewById(R.id.btn_call_phone);
@@ -98,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 callPhone("1000");
             }
         } else {
-            callPhone("10000");
+            callPhone("100000");
         }
     }
 
