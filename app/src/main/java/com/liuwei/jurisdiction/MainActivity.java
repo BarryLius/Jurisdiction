@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 callPhone("1000");
             }
         } else {
-            callPhone("1000");
+            callPhone("10000");
         }
     }
 
