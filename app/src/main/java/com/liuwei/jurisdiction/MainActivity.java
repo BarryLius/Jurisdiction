@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.liuwei.jurisdiction.adapter.MainActicityAdapter;
 import com.liuwei.jurisdiction.utils.PermissionCode;
+import com.liuwei.jurisdiction.utils.SystemActivityUtils;
 import com.liuwei.jurisdiction.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (requestCode == PermissionCode.WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ToastUtil.toast(mContext, "授予权限");
+            } else {
+                ToastUtil.toast(mContext, "不授予权限");
+            }
+        }
+        if (requestCode == PermissionCode.CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                SystemActivityUtils.camera(mContext);
             } else {
                 ToastUtil.toast(mContext, "不授予权限");
             }

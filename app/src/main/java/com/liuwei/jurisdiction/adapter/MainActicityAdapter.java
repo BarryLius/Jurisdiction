@@ -77,6 +77,7 @@ public class MainActicityAdapter extends BaseAdapter {
                         }
                         break;
                     case 2:
+                        ToastUtil.toast(activity, "2");
                         if (isChecked) {
                             if (JurisdictionUtils.applyCallPhone(activity)) {
                                 SystemActivityUtils.callPhone(activity, "10000");
