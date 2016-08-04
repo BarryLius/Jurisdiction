@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Android M权限管理</string>
+    <string-array name="apply_name">
+        <item>SD卡权限</item>
+        <item>相机权限</item>
+        <item>拨打电话权限</item>
+    </string-array>
 </resources>

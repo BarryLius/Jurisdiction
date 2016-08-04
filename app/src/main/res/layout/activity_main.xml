@@ -5,21 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_apply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SD卡"/>
-
-    <Button
-        android:id="@+id/btn_call_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="打电话"/>
-
-    <Button
-        android:id="@+id/btn_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="相机"/>
+    <ListView
+        android:id="@+id/lv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

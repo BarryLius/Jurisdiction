@@ -3,7 +3,7 @@ package com.liuwei.jurisdiction.utils;
 import android.os.Build;
 
 /**
- * Created by mhl on 2016/8/3.
+ * Created by lw on 2016/8/3.
  */
 public class SystemUtils {
     /**

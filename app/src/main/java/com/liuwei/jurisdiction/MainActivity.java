@@ -1,29 +1,29 @@
 package com.liuwei.jurisdiction;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.liuwei.jurisdiction.utils.SystemUtils;
+import com.liuwei.jurisdiction.adapter.MainActicityAdapter;
+import com.liuwei.jurisdiction.utils.PermissionCode;
+import com.liuwei.jurisdiction.utils.ToastUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private Context mContext;
-    public static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
-    private Button btnApply;
-    private Button btnCallPhone;
-    private Button btnCamera;
+    private ListView lvContent;
+    private MainActicityAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,95 +32,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mContext = this;
         initView();
         initListener();
+        initDate();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initDate();
     }
 
     private void initView() {
-        btnApply = (Button) findViewById(R.id.btn_apply);
-        btnCallPhone = (Button) findViewById(R.id.btn_call_phone);
-        btnCamera = (Button) findViewById(R.id.btn_camera);
+        lvContent = (ListView) findViewById(R.id.lv_content);
     }
 
     private void initListener() {
-        btnApply.setOnClickListener(this);
-        btnCallPhone.setOnClickListener(this);
-        btnCamera.setOnClickListener(this);
+        lvContent.setOnItemClickListener(this);
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
+    private void initDate() {
+        String[] array = getResources().getStringArray(R.array.apply_name);
+        List<String> list = new ArrayList<>();
+        Collections.addAll(list, array);
+        adapter = new MainActicityAdapter(MainActivity.this, list);
+        lvContent.setAdapter(adapter);
+    }
+
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_apply:
-                applySDCardStorage();
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                dialog("SD卡权限", "WRITE_EXTERNAL_STORAGE");
                 break;
-            case R.id.btn_call_phone:
-                applyCallPhone();
+            case 1:
+                dialog("相机权限", "PERMISSION_GRANTED");
                 break;
-            case R.id.btn_camera:
-                applyCamera();
+            case 2:
+                dialog("拨号权限", "CALL_PHONE");
                 break;
         }
     }
 
-    /**
-     * 申请SD卡权限
-     */
-    public void applySDCardStorage() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-            Toast.makeText(MainActivity.this, "申请SD卡权限失败", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.this, "申请SD卡权限成功", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * 申请拨打电话权限
-     */
-    public void applyCallPhone() {
-        if (SystemUtils.isM()) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
-                        WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionCode.WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ToastUtil.toast(mContext, "授予权限");
             } else {
-                callPhone("1000");
+                ToastUtil.toast(mContext, "不授予权限");
             }
-        } else {
-            callPhone("100000");
         }
     }
 
-    public void callPhone(@NonNull String mobile) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.CALL");
-        intent.setData(Uri.parse("tel:" + mobile));
-        mContext.startActivity(intent);
-    }
-
-    /**
-     * 申请相机权限
-     */
-    public void applyCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-        } else {
-            camera();
-        }
-    }
-
-    public void camera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, "testImag");
-        startActivityForResult(intent, 1);
+    private void dialog(String title, String message) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_view, null);
+        TextView tv = (TextView) view.findViewById(R.id.tv_dialog);
+        tv.setText(message);
+        new AlertDialog.Builder(mContext)
+                .setTitle(title)
+                .setView(view)
+                .show();
     }
 }
 
