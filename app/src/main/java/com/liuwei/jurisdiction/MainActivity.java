@@ -2,8 +2,12 @@ package com.liuwei.jurisdiction;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                dialog("SD卡权限", "WRITE_EXTERNAL_STORAGE");
+                dialogMessage("SD卡权限", "WRITE_EXTERNAL_STORAGE");
                 break;
             case 1:
-                dialog("相机权限", "PERMISSION_GRANTED");
+                dialogMessage("相机权限", "PERMISSION_GRANTED");
                 break;
             case 2:
-                dialog("拨号权限", "CALL_PHONE");
+                dialogMessage("拨号权限", "CALL_PHONE");
                 break;
         }
     }
@@ -80,25 +84,55 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ToastUtil.toast(mContext, "授予权限");
             } else {
-                ToastUtil.toast(mContext, "不授予权限");
+                dialogSetting("读写存储卡");
             }
         }
         if (requestCode == PermissionCode.CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 SystemActivityUtils.camera(mContext);
             } else {
-                ToastUtil.toast(mContext, "不授予权限");
+                dialogSetting("相机");
+            }
+        }
+        if (requestCode == PermissionCode.CALL_PHONE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                SystemActivityUtils.callPhone(mContext, "1000000");
+            } else {
+                dialogSetting("拨号");
             }
         }
     }
 
-    private void dialog(String title, String message) {
+    private void dialogMessage(String title, String message) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_view, null);
         TextView tv = (TextView) view.findViewById(R.id.tv_dialog);
         tv.setText(message);
         new AlertDialog.Builder(mContext)
                 .setTitle(title)
                 .setView(view)
+                .create()
+                .show();
+    }
+
+    private void dialogSetting(String message) {
+        new AlertDialog.Builder(mContext)
+                .setMessage("请授予读写" + message + "权限")
+                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(Uri.fromParts("package", getPackageName(), null));
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create()
                 .show();
     }
 }

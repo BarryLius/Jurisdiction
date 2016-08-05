@@ -43,7 +43,7 @@ public class JurisdictionUtils {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE},
-                    2);
+                    PermissionCode.CALL_PHONE_REQUEST_CODE);
             return false;
         }
         return true;

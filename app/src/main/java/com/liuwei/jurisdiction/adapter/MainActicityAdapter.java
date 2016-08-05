@@ -64,7 +64,9 @@ public class MainActicityAdapter extends BaseAdapter {
                 switch (position) {
                     case 0:
                         if (isChecked) {
-                            JurisdictionUtils.applySDCardStorage(activity);
+                            if (JurisdictionUtils.applySDCardStorage(activity)) {
+                                ToastUtil.toast(activity, "获取SD卡权限成功");
+                            }
                         }
                         break;
                     case 1:
@@ -77,7 +79,6 @@ public class MainActicityAdapter extends BaseAdapter {
                         }
                         break;
                     case 2:
-                        ToastUtil.toast(activity, "2");
                         if (isChecked) {
                             if (JurisdictionUtils.applyCallPhone(activity)) {
                                 SystemActivityUtils.callPhone(activity, "10000");
