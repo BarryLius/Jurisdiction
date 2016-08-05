@@ -1,5 +1,6 @@
 package com.liuwei.jurisdiction.utils;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,6 +32,16 @@ public class SystemActivityUtils {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.CALL");
         intent.setData(Uri.parse("tel:" + mobile));
+        mContext.startActivity(intent);
+    }
+
+    /**
+     * 蓝牙界面
+     *
+     * @param mContext
+     */
+    public static void bluetooth(Context mContext) {
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         mContext.startActivity(intent);
     }
 

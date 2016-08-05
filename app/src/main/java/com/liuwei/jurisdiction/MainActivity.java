@@ -1,6 +1,7 @@
 package com.liuwei.jurisdiction;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 2:
                 dialogMessage("拨号权限", "CALL_PHONE");
                 break;
+            case 3:
+                dialogMessage("蓝牙权限", "BLUETOOTH_ADMIN");
+                break;
         }
     }
 
@@ -99,6 +103,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 SystemActivityUtils.callPhone(mContext, "10000000");
             } else {
                 dialogSetting("拨号");
+            }
+        }
+        if (requestCode == PermissionCode.BLUETOOTH__REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBluetoothAdapter != null) {
+                    mBluetoothAdapter.enable();
+                }
+            } else {
+                dialogSetting("蓝牙");
             }
         }
     }

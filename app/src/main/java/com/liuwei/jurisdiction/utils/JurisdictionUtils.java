@@ -48,4 +48,17 @@ public class JurisdictionUtils {
         }
         return true;
     }
+
+    /**
+     * 申请蓝牙权限
+     */
+    public static boolean applyBluetooth(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_ADMIN)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_ADMIN},
+                    PermissionCode.BLUETOOTH__REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
 }

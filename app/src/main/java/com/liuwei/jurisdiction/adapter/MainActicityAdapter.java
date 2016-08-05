@@ -1,7 +1,11 @@
 package com.liuwei.jurisdiction.adapter;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.provider.Settings;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +91,25 @@ public class MainActicityAdapter extends BaseAdapter {
                             }
                         }
                         break;
+                    case 3:
+                        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        if (isChecked) {
+                            if (mBluetoothAdapter == null) {
+                                ToastUtil.toast(activity, "本机不支持蓝牙设备");
+                                return;
+                            }
+                            if (JurisdictionUtils.applyBluetooth(activity)) {
+                                if (!mBluetoothAdapter.isEnabled()) {
+                                    mBluetoothAdapter.enable();
+                                }
+                            } else {
+                                ToastUtil.toast(activity, "请允许使用蓝牙权限");
+                            }
+                        } else {
+                            mBluetoothAdapter.disable();
+                        }
+                        break;
+
                 }
             }
         });

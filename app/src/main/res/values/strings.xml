@@ -4,5 +4,6 @@
         <item>SD卡权限</item>
         <item>相机权限</item>
         <item>拨打电话权限</item>
+        <item>蓝牙权限</item>
     </string-array>
 </resources>
