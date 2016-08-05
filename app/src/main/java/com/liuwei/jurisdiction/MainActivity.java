@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         if (requestCode == PermissionCode.CALL_PHONE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                SystemActivityUtils.callPhone(mContext, "1000000");
+                SystemActivityUtils.callPhone(mContext, "10000000");
             } else {
                 dialogSetting("拨号");
             }
