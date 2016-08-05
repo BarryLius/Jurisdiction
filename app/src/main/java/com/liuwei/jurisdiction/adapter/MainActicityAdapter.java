@@ -103,7 +103,7 @@ public class MainActicityAdapter extends BaseAdapter {
                                     mBluetoothAdapter.enable();
                                 }
                             } else {
-                                ToastUtil.toast(activity, "请允许使用蓝牙权限");
+                                ToastUtil.toast(activity, "请允许使用蓝牙权限。");
                             }
                         } else {
                             mBluetoothAdapter.disable();
